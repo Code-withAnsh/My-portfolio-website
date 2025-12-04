@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shivmani Singh | Frontend Developer Portfolio</title>
+    <!-- Remix Icon CSS CDN for modern icons - CORRECTED LINK -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Tailwind CSS CDN for modern, responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP Core Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- GSAP ScrollTrigger Plugin for scroll-based animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+    <!-- Configure Tailwind to use the Inter font and a custom theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': 'var(--primary-color, #6366f1)', // Default Blue
+                        'secondary': 'var(--secondary-color, #1f2937)', // Dark Gray
+                        'accent': 'var(--accent-color, #10b981)', // Green accent
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- ########################### CUSTOM STYLES (CSS) ########################### -->
+    <style>
+        /* General Styles and Variables */
+        :root {
+            /* Default Theme: Indigo/Green */
+            --bg-color: #0d1117;
+            --text-color: #e5e7eb;
+            --primary-color: #6366f1; /* Indigo */
+            --accent-color: #10b981; /* Green */
+            --card-bg: #1f2937;
+            scroll-behavior: smooth;
+        }
+
+        /* Color Theme 2: Yellow/Orange */
+        .theme-yellow {
+            --primary-color: #f59e0b; /* Amber */
+            --accent-color: #ea580c; /* Orange */
+            --card-bg: #262626;
+        }
+        
+        /* Color Theme 3: Blue/Cyan */
+        .theme-blue {
+            --primary-color: #0ea5e9; /* Sky Blue */
+            --accent-color: #06b6d4; /* Cyan */
+            --card-bg: #1e3a8a;
+        }
+
+        /* Color Theme 4: Purple/Pink */
+        .theme-purple {
+            --primary-color: #a855f7; /* Violet */
+            --accent-color: #ec4899; /* Pink */
+            --card-bg: #4c1d95;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.5s, color 0.5s;
+        }
+        
+        /* Utility Classes */
+        .section-padding {
+            padding: 5rem 1rem;
+        }
+
+        .h2-title {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .cta-button {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            display: inline-block;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            background-color: var(--accent-color);
+        }
+
+        /* ==================== LOADER STYLES ==================== */
+        .loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 1;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: block; /* Ensure it's visible while loading */
+        }
+        .loader-wrapper.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ==================== NAV BAR STYLES ==================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--card-bg);
+            z-index: 999;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--accent-color);
+        }
+        .nav-links {
+            display: none; /* Hidden by default on mobile */
+        }
+        .nav-links a {
+            color: var(--text-color);
+            margin-left: 2rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        .hamburger-menu {
+            cursor: pointer;
+            font-size: 1.8rem;
+            display: block; /* Visible by default on mobile */
+        }
+
+        /* Mobile Sidebar Menu */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 70%;
+            max-width: 300px;
+            height: 100%;
+            background-color: var(--card-bg);
+            padding: 2rem;
+            transform: translateX(100%);
+            transition: transform 0.4s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        .close-btn {
+            align-self: flex-end;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        /* Desktop view adjustments */
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex; /* Visible on desktop */
+            }
+            .hamburger-menu {
+                display: none; /* Hidden on desktop */
+            }
+            .sidebar {
+                display: none; /* Always hidden on desktop */
+            }
+            .header {
+                padding: 1rem 5rem;
+            }
+            .section-padding {
+                padding: 6rem 5rem;
+            }
+        }
+
+        /* ==================== HERO SECTION STYLES (UPDATED) ==================== */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column-reverse; /* Text on top on mobile */
+            gap: 4rem;
+            position: relative;
+            overflow: hidden;
+            padding-top: 5rem;
+        }
+        @media (min-width: 1024px) {
+            .hero-section {
+                flex-direction: row; /* Image on right, Text on left on desktop */
+                justify-content: space-evenly; /* Adjusted to give more space for text/image */
+                text-align: left;
+            }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 650px; /* Slightly increased max-width for better text fit */
+            z-index: 10;
+        }
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            /* Added for mobile/desktop text wrapping control */
+            word-break: break-word; 
+        }
+        .hero-content .name {
+            color: var(--primary-color);
+        }
+        
+        /* FIX: Ensure H1 stays on one line on desktop */
+        @media (min-width: 1024px) {
+            .hero-content h1 {
+                white-space: nowrap; /* Forces the text to stay on a single line */
+            }
+        }
+
+
+        /* Matrix Text Styling (Frontend Developer) */
+        .matrix-text {
+            font-size: clamp(1.2rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 5px var(--accent-color);
+            overflow: hidden; /* Important for animation */
+        }
+        .matrix-char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        
+        /* New style for the image wrapper */
+        .hero-image-wrapper {
+            /* Ensures proper centering in the flex container */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        /* IMPORTANT: Styling the <img> tag directly (No background circle, no border, no shadow) */
+        .hero-image {
+            /* Keep responsive image size adjustment */
+            width: clamp(500px, 70vw, 700px); 
+            height: clamp(500px, 70vw, 750px); 
+            
+            object-fit: cover;
+            transition: all 0.5s ease;
+            display: block; 
+            border-radius: 8px; /* Optional: Added a small radius for modern look */
+            /* Adjusted margin for better centering on large screens */
+             /* Removed original margin-left: 15vw; */
+             margin-left: 20vw;
+        }
+    
+        
+        /* Background Particle Effect (Simple CSS animation) */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite alternate ease-in-out;
+            opacity: 0.5;
+        }
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, -50px) scale(1.2); }
+        }
+
+        /* ==================== WORK/EDUCATION TIMELINE STYLES ==================== */
+        .timeline-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--primary-color);
+            top: 0;
+            bottom: 0;
+            left: 31px; /* For mobile */
+            margin-left: -3px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 100%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: var(--card-bg);
+            border: 4px solid var(--accent-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: var(--card-bg);
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+        .timeline-content:hover {
+            transform: translateY(-5px);
+        }
+        .timeline-item:nth-child(even)::after {
+             background-color: var(--card-bg);
+        }
+
+        /* Mobile specific adjustments for timeline */
+        @media (max-width: 767px) {
+            .timeline-container::after {
+                left: 31px;
+            }
+            .timeline-item {
+                padding-left: 70px;
+                padding-right: 20px;
+            }
+            .timeline-item::after {
+                left: 20px;
+                right: auto;
+            }
+            .timeline-item:nth-child(odd) {
+                text-align: left;
+            }
+        }
+
+        /* Desktop specific adjustments for timeline */
+        @media (min-width: 768px) {
+            .timeline-container::after {
+                left: 50%;
+            }
+            .timeline-item {
+                width: 50%;
+            }
+            .timeline-item:nth-child(odd) {
+                left: 0;
+            }
+            .timeline-item:nth-child(even) {
+                left: 50%;
+            }
+            .timeline-item::after {
+                right: -12.5px;
+            }
+            .timeline-item:nth-child(even)::after {
+                left: -12.5px;
+                right: auto;
+            }
+        }
+
+        /* ==================== PROJECT CARD STYLES ==================== */
+        .project-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .project-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.6);
+            border-color: var(--primary-color);
+        }
+        .project-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: opacity 0.3s;
+        }
+        .project-card:hover img {
+            opacity: 0.9;
+        }
+
+        /* ==================== SKILL BAR STYLES ==================== */
+        .skill-item {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .progress-bar-container {
+            height: 10px;
+            background-color: #374151;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: var(--accent-color);
+            transition: width 1.5s ease-out;
+            width: 0; /* Initial state for GSAP animation */
+            border-radius: 5px;
+        }
+        
+        /* ==================== CONTACT ICON STYLES (NEW) ==================== */
+        .social-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--primary-color);
+            transition: transform 0.3s, color 0.3s;
+            padding: 1rem;
+            border-radius: 12px;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            min-width: 120px;
+        }
+        .social-icon:hover {
+            transform: translateY(-5px) scale(1.05);
+            color: var(--accent-color);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+        }
+        .social-icon i {
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+        .social-icon:hover i {
+            color: var(--accent-color);
+        }
+
+
+        /* ==================== SCROLL TO TOP BUTTON ==================== */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+            z-index: 990;
+        }
+        .scroll-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .scroll-to-top:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        /* ==================== THEME CHANGER BUTTON ==================== */
+        .theme-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            z-index: 995;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .theme-toggle-btn:hover {
+            transform: rotate(30deg) scale(1.1);
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        .mt-16 text-lg text-gray-500{
+            margin-top: 300vh;
+        }
+    </style>
+</head>
+<body class="theme-default">
+
+    <!-- ########################### LOADING ANIMATION ########################### -->
+    <div class="loader-wrapper">
+        <div class="loader"></div>
+    </div>
+    
+    <!-- ########################### THEME CHANGER BUTTON ########################### -->
+    <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Change Theme">
+        <i class="ri-palette-line"></i>
+    </button>
+
+    <!-- ########################### NAVIGATION BAR (Header) ########################### -->
+    <header class="header">
+        <div class="logo">Shivmani Singh</div>
+        <!-- Desktop Navigation Links -->
+        <nav class="nav-links">
+            <a href="#home" class="scroll-link">Home</a>
+            <a href="#about" class="scroll-link">About</a>
+            <a href="#work" class="scroll-link">Work</a>
+            <a href="#education" class="scroll-link">Education</a>
+            <a href="#projects" class="scroll-link">Projects</a>
+            <a href="#skills" class="scroll-link">Skills</a>
+            <a href="#contact" class="scroll-link">Contact</a>
+        </nav>
+        <!-- Mobile Hamburger Icon -->
+        <div class="hamburger-menu" id="hamburger">
+            <i class="ri-menu-line"></i>
+        </div>
+    </header>
+
+    <!-- ########################### MOBILE SIDEBAR MENU ########################### -->
+    <div class="sidebar" id="sidebar">
+        <div class="close-btn" id="close-sidebar"><i class="ri-close-line"></i></div>
+        <a href="#home" class="scroll-link">Home</a>
+        <a href="#about" class="scroll-link">About</a>
+        <a href="#work" class="scroll-link">Work</a>
+        <a href="#education" class="scroll-link">Education</a>
+        <a href="#projects" class="scroll-link">Projects</a>
+        <a href="#skills" class="scroll-link">Skills</a>
+        <a href="#contact" class="scroll-link">Contact</a>
+    </div>
+
+    <!-- ########################### MAIN CONTENT ########################### -->
+    <main>
+        
+        <!-- ======================= 1. HERO SECTION ======================= -->
+        <section id="home" class="hero-section">
+             <!-- Background Floating Particles -->
+            <div class="particles" id="particles-container"></div>
+            
+            <div class="hero-content">
+                <h1>Hello, I'm <span class="name">Shivmani Singh</span></h1>
+                <!-- Matrix Style Text Target -->
+                <p class="matrix-text" id="matrix-text" data-text="Frontend Developer">Frontend Developer</p>
+                <a href="#contact" class="cta-button scroll-link">Let's Connect</a>
+            </div>
+            
+            <!-- Updated image structure -->
+            <div class="hero-image-wrapper"> 
+                <!-- Profile Image (placeholder URL) -->
+                <img 
+                    id="hero-profile-image" 
+                    class="hero-image" 
+                    src="Gemini_Generated_Image_bst8aebst8aebst8-removebg-preview.png" 
+                    alt="Shivmani Singh's profile image"
+                >
+            </div>
+        </section>
+
+        <!-- ======================= 2. ABOUT SECTION ======================= -->
+        <section id="about" class="section-padding max-w-7xl mx-auto">
+            <h2 class="h2-title">About <span class="text-accent">Me</span></h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                
+                <div class="about-text p-6 bg-card-bg rounded-xl shadow-2xl space-y-4">
+                    <p class="text-lg leading-relaxed">
+                        Hello! I am **Shivmani Singh**, an enthusiastic Frontend Developer from Basti, UP. My journey in web development began in 2024, and since then, I've developed a passion for crafting unique user interfaces, modern websites, and complex JavaScript animations.
+                    </p>
+                    <p class="text-lg leading-relaxed">
+                        I am currently pursuing my **second year of BCA** from Rajarshi School of Management & Technology, Varanasi, where I'm building a strong foundation in computer science principles. My focus is on turning complex ideas into clean, engaging, and highly interactive digital experiences.
+                    </p>
+                    <p class="text-lg leading-relaxed text-primary font-medium">
+                        I am constantly learning new technologies and enjoy the process of bringing static designs to life with performance-focused code.
+                    </p>
+                </div>
+                
+                <div class="about-image-cta flex flex-col items-center justify-center p-6 space-y-6">
+                    <!-- Placeholder for secondary image or abstract view -->
+                    <div class="w-full max-w-sm h-64 bg-card-bg rounded-xl flex items-center justify-center text-primary text-xl font-bold border-2 border-primary border-dashed">
+                        &lt; Passionate Coder /&gt;
+                    </div>
+                    <!-- Resume Download Button (Placeholder) -->
+                    <a href="YourName_Resume-2.pdf" target="_blank"  download="Shivmani_Singh_Resume.pdf" class="cta-button">
+                        <i class="ri-download-2-line mr-2"></i> Download Resume
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= 3. WORK EXPERIENCE SECTION ======================= -->
+        <section id="work" class="section-padding max-w-7xl mx-auto">
+            <h2 class="h2-title">Work <span class="text-accent">Experience</span></h2>
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-bold text-accent mb-2 flex items-center">
+                            <i class="ri-code-s-slash-line mr-3"></i> Frontend Developer Journey
+                        </h3>
+                        <p class="text-gray-400 font-light italic">2024 - Present</p>
+                        <ul class="list-disc pl-5 mt-3 space-y-1 text-gray-300">
+                            <li>**No professional work experience yet.**</li>
+                            <li>Began the frontend journey in 2024, focusing on HTML, CSS, JavaScript, and modern animation techniques (GSAP).</li>
+                            <li>Building a foundational portfolio through self-initiated projects.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= 4. EDUCATION SECTION ======================= -->
+        <section id="education" class="section-padding pt-0 max-w-7xl mx-auto">
+            <h2 class="h2-title">My <span class="text-accent">Education</span></h2>
+            <div class="timeline-container">
+                 <div class="timeline-item timeline-right">
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-bold text-accent mb-2 flex items-center">
+                            <i class="ri-graduation-cap-line mr-3"></i> Bachelor of Computer Applications (BCA)
+                        </h3>
+                        <p class="text-lg font-semibold text-primary">Rajarshi School of Management & Technology, Varanasi</p>
+                        <p class="text-gray-400 font-light italic">Second Year (Current)</p>
+                        <p class="mt-2 text-gray-300">Focusing on core programming concepts, data structures, and software development methodologies.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= 5. PROJECTS SECTION ======================= -->
+        <section id="projects" class="section-padding max-w-7xl mx-auto">
+            <h2 class="h2-title">Featured <span class="text-accent">Projects</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                
+                <!-- Project Card 1 -->
+                <a href=" https://code-withansh.github.io/psychopedia/" target="_blank" rel="noopener noreferrer" class="project-card project-anim-trigger">
+                    <img src="Gemini_Generated_Image_db080kdb080kdb08.png" onerror="this.onerror=null; this.src='https://placehold.co/600x400/94a3b8/ffffff?text=Library+Website';" alt="Project Placeholder Image 1">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Library Website</h3>
+                        <p class="text-gray-300">A clean, responsive landing page template built using HTML CSS and JavaScript, providing a sleek user experience. it is for the BA pyschology students </p>
+                    </div>
+                </a>
+                
+                <!-- Project Card 2 -->
+                <a href=" https://code-withansh.github.io/clinic-website/" target="_blank" rel="noopener noreferrer" class="project-card project-anim-trigger">
+                    <img src="Gemini_Generated_Image_rqtqnzrqtqnzrqtq.png" onerror="this.onerror=null; this.src='https://placehold.co/600x400/38bdf8/ffffff?text=Clinic+Website';" alt="Project Placeholder Image 2">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Clinic Website</h3>
+                        <p class="text-gray-300">An experimental web page showcasing various CSS layout. this is the Clinic website made by Shivmani</p>
+                    </div>
+                </a>
+
+                <!-- Project Card 3 -->
+                <a href=" https://code-withansh.github.io/attendancee-tracker-section-" target="_blank" rel="noopener noreferrer" class="project-card project-anim-trigger">
+                    <img src="Gemini_Generated_Image_eeinejeeinejeein.png" onerror="this.onerror=null; this.src='https://placehold.co/600x400/6b7280/ffffff?text=Vanilla+JS+App';" alt="Project Placeholder Image 3">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Vanilla JavaScript Todo App</h3>
+                        <p class="text-gray-300">A fully functional To-Do list application developed using pure JavaScript, demonstrating state management and DOM manipulation skills.</p>
+                    </div>
+                </a>
+                
+               
+            </div>
+        </section>
+
+        <!-- ======================= 6. SKILLS SECTION ======================= -->
+        <section id="skills" class="section-padding max-w-7xl mx-auto">
+            <h2 class="h2-title">My Technical <span class="text-accent">Skills</span></h2>
+            
+            <!-- Skills Grid Layout -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Skill 1: HTML -->
+                <div class="skill-item skill-anim-trigger">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-lg font-semibold text-text-color flex items-center">
+                            <i class="ri-html5-fill text-xl text-orange-500 mr-2"></i> HTML5
+                        </span>
+                        <span class="text-sm text-gray-400">95%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-progress="95" id="skill-html"></div>
+                    </div>
+                </div>
+
+                <!-- Skill 2: CSS -->
+                <div class="skill-item skill-anim-trigger">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-lg font-semibold text-text-color flex items-center">
+                            <i class="ri-css3-fill text-xl text-blue-500 mr-2"></i> CSS3 / Tailwind
+                        </span>
+                        <span class="text-sm text-gray-400">90%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-progress="90" id="skill-css"></div>
+                    </div>
+                </div>
+
+                <!-- Skill 3: JavaScript -->
+                <div class="skill-item skill-anim-trigger">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-lg font-semibold text-text-color flex items-center">
+                            <i class="ri-javascript-fill text-xl text-yellow-500 mr-2"></i> JavaScript (ES6+)
+                        </span>
+                        <span class="text-sm text-gray-400">80%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-progress="80" id="skill-js"></div>
+                    </div>
+                </div>
+                
+                <!-- Skill 4: GSAP -->
+                <div class="skill-item skill-anim-trigger">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-lg font-semibold text-text-color flex items-center">
+                            <i class="ri-lightbulb-flash-line text-xl text-accent mr-2"></i> GSAP (Animations)
+                        </span>
+                        <span class="text-sm text-gray-400">75%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-progress="75" id="skill-gsap"></div>
+                    </div>
+                </div>
+                
+                <!-- Skill 6: Git -->
+                <div class="skill-item skill-anim-trigger">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-lg font-semibold text-text-color flex items-center">
+                            <i class="ri-git-branch-line text-xl text-red-500 mr-2"></i> Git / GitHub
+                        </span>
+                        <span class="text-sm text-gray-400">70%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-progress="70" id="skill-git"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ======================= 7. CONTACT SECTION (UPDATED) ======================= -->
+        <section id="contact" class="section-padding max-w-7xl mx-auto text-center">
+            <h2 class="h2-title">Get In <span class="text-accent">Touch</span></h2>
+            <p class="text-xl text-gray-300 mb-12 max-w-3xl mx-auto">
+                I'm currently looking for new opportunities and collaborations. Feel free to reach out via any of the platforms below!
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-10">
+                
+                <!-- GitHub -->
+                <a href="https://github.com/Code-withAnsh" target="_blank" rel="noopener noreferrer" 
+                   class="social-icon" aria-label="GitHub Profile">
+                    <i class="ri-github-fill text-4xl md:text-5xl"></i>
+                    <span class="text-sm font-medium">GitHub</span>
+                </a>
+                
+                <!-- X (Twitter) -->
+                <a href="https://twitter.com/your-x-handle" target="_blank" rel="noopener noreferrer" 
+                   class="social-icon" aria-label="X (Twitter) Profile">
+                    <i class="ri-twitter-x-fill text-4xl md:text-5xl"></i>
+                    <span class="text-sm font-medium">X (Twitter)</span>
+                </a>
+                
+                <!-- WhatsApp -->
+                <a href="https://wa.me/7379685052" target="_blank" rel="noopener noreferrer" 
+                   class="social-icon" aria-label="WhatsApp Contact">
+                    <i class="ri-whatsapp-line text-4xl md:text-5xl"></i>
+                    <span class="text-sm font-medium">WhatsApp</span>
+                </a>
+                
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/shivmani-singh-11b122306/" target="_blank" rel="noopener noreferrer" 
+                   class="social-icon" aria-label="LinkedIn Profile">
+                    <i class="ri-linkedin-fill text-4xl md:text-5xl"></i>
+                    <span class="text-sm font-medium">LinkedIn</span>
+                </a>
+                
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/its_rudra___01?igsh=MW5iZ2hjOWR6a2M3bg==" target="_blank" rel="noopener noreferrer" 
+                   class="social-icon" aria-label="Instagram Profile">
+                    <i class="ri-instagram-line text-4xl md:text-5xl"></i>
+                    <span class="text-sm font-medium">Instagram</span>
+                </a>
+                
+                <!-- YouTube -->
+                <a href="https://www.youtube.com/@CodewithAnsh1" target="_blank" rel="noopener noreferrer" 
+                   class="social-icon" aria-label="YouTube Channel">
+                    <i class="ri-youtube-fill text-4xl md:text-5xl"></i>
+                    <span class="text-sm font-medium">YouTube</span>
+                </a>
+                
+                <!-- Gmail -->
+                <a href="mailto:anshs9333#gmail.com" class="social-icon" aria-label="Email Contact">
+                    <i class="ri-mail-fill text-4xl md:text-5xl"></i>
+                    <span class="text-sm font-medium">Gmail</span>
+                </a>
+            </div>
+            
+            
+        </section>
+
+    </main>
+
+    <!-- ########################### SCROLL TO TOP BUTTON ########################### -->
+    <button class="scroll-to-top" id="scroll-to-top" aria-label="Scroll to top">
+        <i class="ri-arrow-up-line"></i>
+    </button>
+    
+    <!-- ########################### FOOTER ########################### -->
+    <footer class="py-6 text-center text-sm text-gray-500 border-t border-card-bg">
+        &copy; <span id="current-year"></span> Shivmani Singh. All rights reserved.
+    </footer>
+
+
+    <!-- ########################### JAVASCRIPT LOGIC ########################### -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // GSAP registration
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // --- Global Elements ---
+            const body = document.body;
+            const loaderWrapper = document.querySelector('.loader-wrapper');
+            const hamburger = document.getElementById('hamburger');
+            const sidebar = document.getElementById('sidebar');
+            const closeSidebar = document.getElementById('close-sidebar');
+            const scrollLinks = document.querySelectorAll('.scroll-link');
+            const scrollTopBtn = document.getElementById('scroll-to-top');
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // --- 1. PRELOADER & INITIAL ANIMATION ---
+            function hidePreloader() {
+                gsap.to(loaderWrapper, {
+                    opacity: 0,
+                    duration: 0.5,
+                    delay: 0.5,
+                    onComplete: () => {
+                        loaderWrapper.classList.add('hidden');
+                        animateHeroSection();
+                    }
+                });
+            }
+            
+            // Simple window load simulation (replace with real resource loading if necessary)
+            setTimeout(hidePreloader, 1000); 
+
+            // --- 2. HERO SECTION ANIMATION (GSAP) ---
+            function animateHeroSection() {
+                const nameText = document.querySelector('.hero-content h1');
+                const matrixTextEl = document.getElementById('matrix-text');
+                const matrixTextContent = matrixTextEl.getAttribute('data-text');
+                const heroImage = document.getElementById('hero-profile-image');
+
+                // Split the Matrix Text into individual characters
+                matrixTextEl.innerHTML = matrixTextContent.split('')
+                    .map(char => `<span class="matrix-char">${char === ' ' ? '&nbsp;' : char}</span>`)
+                    .join('');
+                
+                const matrixChars = document.querySelectorAll('.matrix-char');
+
+                const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+                tl.from(nameText, { y: 50, opacity: 0, duration: 1.2 })
+                  .from(heroImage, { scale: 0.8,  duration: 1.5, ease: "elastic.out(1, 0.5)" }, "<0.2")
+                  .to(matrixChars, {
+                      opacity: 1,
+                      y: 0,
+                      stagger: 0.05,
+                      duration: 0.4,
+                      ease: "power2.inOut",
+                      onComplete: () => {
+                          // Add pulsing effect after typing animation completes
+                          gsap.to(matrixChars, {
+                              color: 'var(--primary-color)',
+                              repeat: -1,
+                              yoyo: true,
+                              duration: 1.5,
+                              ease: "sine.inOut",
+                              stagger: 0.05,
+                          });
+                      }
+                  }, "<0.5")
+                  .from('.hero-content .cta-button', { scale: 0, opacity: 0, duration: 0.6 }, "-=0.5");
+                  
+                // Floating Particle Generation
+                generateParticles();
+            }
+            
+            // --- 3. PARTICLE EFFECT GENERATION ---
+            function generateParticles() {
+                const container = document.getElementById('particles-container');
+                const numParticles = 20;
+                
+                for (let i = 0; i < numParticles; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    
+                    const size = Math.random() * 5 + 5; // 5px to 10px
+                    const duration = Math.random() * 10 + 10; // 10s to 20s
+                    const delay = Math.random() * 5;
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${x}vw`;
+                    particle.style.top = `${y}vh`;
+                    particle.style.animationDuration = `${duration}s`;
+                    particle.style.animationDelay = `${delay}s`;
+                    
+                    container.appendChild(particle);
+                }
+            }
+
+
+            // --- 4. SCROLLTRIGGERS & SCROLL ANIMATIONS ---
+            
+            // a) Skill Bar Animation
+            const skillBars = document.querySelectorAll('.progress-bar');
+            skillBars.forEach(bar => {
+                const progress = bar.getAttribute('data-progress');
+                gsap.to(bar, {
+                    width: `${progress}%`,
+                    duration: 1.5,
+                    scrollTrigger: {
+                        trigger: bar,
+                        start: "top 80%", // Start animation when the bar enters the viewport
+                        toggleActions: "play none none none"
+                    }
+                });
+            });
+
+            // b) Section Header Fade-in
+            const titles = document.querySelectorAll('.h2-title');
+            titles.forEach(title => {
+                gsap.from(title, {
+                    y: 50,
+                    opacity: 0,
+                    duration: 1,
+                    scrollTrigger: {
+                        trigger: title,
+                        start: "top 90%",
+                        toggleActions: "play none none none"
+                    }
+                });
+            });
+
+            // c) Project Card & Timeline Item Reveal
+            const projectCards = document.querySelectorAll('.project-card, .timeline-item, .about-text, .about-image-cta, .social-icon');
+            projectCards.forEach(item => {
+                gsap.from(item, {
+                    y: 100,
+                    opacity: 0,
+                    duration: 0.8,
+                    stagger: 0.2,
+                    scrollTrigger: {
+                        trigger: item,
+                        start: "top 90%",
+                        toggleActions: "play none none none"
+                    }
+                });
+            });
+
+            // --- 5. NAVIGATION & UTILITY ---
+
+            // a) Mobile Sidebar Toggle
+            hamburger.addEventListener('click', () => {
+                sidebar.classList.add('open');
+            });
+
+            closeSidebar.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+            });
+            
+            // Close sidebar and smooth scroll on link click
+            scrollLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    document.querySelector(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    sidebar.classList.remove('open');
+                });
+            });
+
+            // b) Scroll To Top Button Visibility
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            });
+
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // c) Theme Switching Logic
+            const themes = ['theme-default', 'theme-yellow', 'theme-blue', 'theme-purple'];
+            let currentThemeIndex = 0;
+            
+            function applyTheme(themeName) {
+                body.className = themeName;
+                // Update CSS variables for Tailwind to pick up
+                const root = document.documentElement;
+                if (themeName === 'theme-default') {
+                    root.style.setProperty('--primary-color', '#6366f1');
+                    root.style.setProperty('--accent-color', '#10b981');
+                    root.style.setProperty('--bg-color', '#0d1117');
+                    root.style.setProperty('--card-bg', '#1f2937');
+                } else if (themeName === 'theme-yellow') {
+                    root.style.setProperty('--primary-color', '#f59e0b');
+                    root.style.setProperty('--accent-color', '#ea580c');
+                    root.style.setProperty('--bg-color', '#1c1917');
+                    root.style.setProperty('--card-bg', '#292524');
+                } else if (themeName === 'theme-blue') {
+                    root.style.setProperty('--primary-color', '#0ea5e9');
+                    root.style.setProperty('--accent-color', '#06b6d4');
+                    root.style.setProperty('--bg-color', '#071520');
+                    root.style.setProperty('--card-bg', '#1e3a8a');
+                } else if (themeName === 'theme-purple') {
+                    root.style.setProperty('--primary-color', '#a855f7');
+                    root.style.setProperty('--accent-color', '#ec4899');
+                    root.style.setProperty('--bg-color', '#1e0f2e');
+                    root.style.setProperty('--card-bg', '#4c1d95');
+                }
+                // Rerun animations affected by color change if needed (optional)
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+                applyTheme(themes[currentThemeIndex]);
+            });
+            
+            // Initialize with the default theme (important for GSAP/Tailwind)
+            applyTheme(themes[0]);
+        });
+    </script>
+</body>
+</html>
